@@ -62,10 +62,13 @@ class GameEngine:
         if self.ball.get_rect().colliderect(self.paddle.get_rect()) and self.ball.vy > 0:
             self.ball.bounce_off_paddle(self.paddle.get_rect())
 
-        for brick in self.bricks:
+                for brick in self.bricks:
             if handle_ball_brick_collision(self.ball, brick):
-                brick.hits_remaining -= 1   # BUG: tracked, but never actually checked to remove the brick
+                brick.hits_remaining -= 1
                 break
+
+        # NEW: remove bricks that have no hits remaining
+        self.bricks = [b for b in self.bricks if b.hits_remaining > 0]
 
         if self.ball.is_below(HEIGHT):
             self._reset_ball()
